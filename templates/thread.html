@@ -55,5 +55,18 @@
             {% endfor %}
         </div>
     </div>
+    <script>
+    // Verifica a cada 5 segundos
+    setInterval(function(){
+        // Só recarrega se o usuário NÃO estiver escrevendo nos campos
+        const inputs = document.querySelectorAll('input, textarea');
+        const algumFocado = Array.from(inputs).some(el => el === document.activeElement);
+
+        if (!algumFocado) {
+            location.reload();
+        }
+    }, 5000);
+</script>
 </body>
 </html>
+
