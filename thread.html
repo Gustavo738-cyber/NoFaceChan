@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>NoFaceChan - Thread #{{ principal.id }}</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0e0d6; color: #800000; padding: 20px; }
+        .post-principal { background-color: #d6daf0; padding: 15px; border: 1px solid #b7c5d9; margin-bottom: 30px; max-width: 850px; }
+        .area-respostas { margin-left: 20px; border-left: 2px solid #d9bfb7; padding-left: 20px; }
+        .resposta { background-color: #f0e0d6; border: 1px solid #d9bfb7; border-left: 5px solid #b7a5d9; padding: 12px; margin-bottom: 15px; max-width: 750px; }
+        .post-header { font-size: 0.85em; margin-bottom: 8px; border-bottom: 1px dashed #d9bfb7; padding-bottom: 5px; }
+        .nome { color: #117743; font-weight: bold; }
+        .nome-admin { color: red !important; text-shadow: 1px 1px 2px yellow; }
+        .num-sequencial { background: #e2e2e2; padding: 2px 6px; border-radius: 3px; color: #444; font-family: monospace; }
+        .conteudo { color: #000; white-space: pre-wrap; }
+        .btn-excluir { color: red; font-size: 0.8em; text-decoration: none; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <a href="/">← Voltar para a Home</a>
+
+    <div style="margin-top: 20px;">
+        <div class="post-principal">
+            <div class="post-header">
+                <span style="color: #0f0c5d; font-weight: bold;">{{ principal.titulo if principal.titulo else "Tópico" }}</span>
+                <span class="nome {{ 'nome-admin' if principal.nome == 'Administrador' else '' }}">
+                    {{ principal.nome }}
+                </span> 
+                <span class="num-sequencial">OP</span>
+                <a href="/deletar/{{ principal.id }}" class="btn-excluir" onclick="return confirm('Deletar a thread toda?')">[Excluir Thread]</a>
+            </div>
+            <div class="conteudo">{{ principal.conteudo }}</div>
+        </div>
+
+        <div style="background: #d6daf0; padding: 15px; border: 1px solid #b7c5d9; display: inline-block; margin-bottom: 20px;">
+            <form action="/comentario/{{ principal.id }}" method="post">
+                <input type="text" name="nome" placeholder="Nome (##admin123 para mod)"><br><br>
+                <textarea name="mensagem" rows="4" cols="50" placeholder="Sua resposta..." required></textarea><br>
+                <button type="submit">Enviar Resposta</button>
+            </form>
+        </div>
+
+        <div class="area-respostas">
+            {% for r in respostas %}
+                <div class="resposta">
+                    <div class="post-header">
+                        <span class="nome {{ 'nome-admin' if r.nome == 'Administrador' else '' }}">
+                            {{ r.nome }}
+                        </span> 
+                        <span class="num-sequencial">#{{ r.numero_na_thread() }}</span>
+                        <a href="/deletar/{{ r.id }}" class="btn-excluir" onclick="return confirm('Apagar esta resposta?')">[X]</a>
+                    </div>
+                    <div class="conteudo">{{ r.conteudo }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

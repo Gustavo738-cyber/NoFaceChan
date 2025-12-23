@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoFaceChan</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0e0d6; color: #800000; padding: 20px; }
+        .formulario { background-color: #d6daf0; padding: 15px; border: 1px solid #b7c5d9; display: inline-block; margin-bottom: 20px; }
+        .post { background-color: #f0e0d6; border-bottom: 1px solid #d9bfb7; padding: 10px; margin-bottom: 5px; max-width: 800px; }
+        .post-header { font-size: 0.9em; margin-bottom: 5px; }
+        .nome { color: #117743; font-weight: bold; }
+        .nome-admin { color: red !important; text-shadow: 1px 1px 2px yellow; }
+        .titulo { color: #0f0c5d; font-weight: bold; }
+        .conteudo { margin-top: 5px; color: black; white-space: pre-wrap; }
+        .btn-excluir { color: red; font-size: 0.8em; text-decoration: none; margin-left: 10px; }
+        hr { border: 0; border-top: 1px solid #d9bfb7; }
+    </style>
+</head>
+<body>
+    <h1>NoFaceChan, 100% anônimo ;)</h1>
+    <p>Total de mensagens: <strong>{{ total }}</strong></p>
+    
+    <div class="formulario">
+        <form action="/comentario" method="post">
+            <input type="text" name="nome" placeholder="Nome (opcional)">
+            <input type="text" name="titulo" placeholder="Assunto">
+            <br><br>
+            <textarea name="mensagem" rows="4" cols="40" placeholder="Escreva sua mensagem aqui..." required></textarea>
+            <br>
+            <button type="submit">Postar</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <div id="lista-posts">
+        {% for post in posts %}
+            <div class="post">
+                <div class="post-header">
+                    <span class="titulo">{{ post.titulo if post.titulo else "" }}</span>
+                    <span class="nome {{ 'nome-admin' if post.nome == 'Administrador' else '' }}">
+                        {{ post.nome }}
+                    </span> 
+                    <span>No. {{ post.id }}</span>
+                    
+                    <span style="color: #666; font-size: 0.8em;">({{ post.contar_respostas() }} respostas)</span>
+                    
+                    <a href="/thread/{{ post.id }}">[Responder]</a>
+                    
+                    <a href="/deletar/{{ post.id }}" class="btn-excluir" onclick="return confirm('Apagar tópico e todas as respostas?')">[X]</a>
+                </div>
+                <div class="conteudo">{{ post.conteudo }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
