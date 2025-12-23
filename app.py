@@ -87,4 +87,8 @@ def deletar_post(post_id):
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
+
     app.run(debug=True)
+    if __name__ == '__main__':
+    # O Render precisa que o app aceite conexões de qualquer IP (0.0.0.0)
+    app.run(host='0.0.0.0', port=5000)
