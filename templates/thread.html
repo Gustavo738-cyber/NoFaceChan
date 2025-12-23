@@ -56,17 +56,28 @@
         </div>
     </div>
     <script>
-    // Verifica a cada 5 segundos
+    // 1. Ao carregar a página, verifica se há uma posição salva e rola até ela
+    window.addEventListener('load', function() {
+        const scrollPos = localStorage.getItem('scrollPosition');
+        if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos));
+            localStorage.removeItem('scrollPosition'); // Limpa para não dar erro depois
+        }
+    });
+
+    // 2. O cronômetro de 5 segundos
     setInterval(function(){
-        // Só recarrega se o usuário NÃO estiver escrevendo nos campos
         const inputs = document.querySelectorAll('input, textarea');
         const algumFocado = Array.from(inputs).some(el => el === document.activeElement);
 
         if (!algumFocado) {
+            // SALVA a posição atual antes de dar o F5
+            localStorage.setItem('scrollPosition', window.scrollY);
             location.reload();
         }
     }, 5000);
 </script>
 </body>
 </html>
+
 
